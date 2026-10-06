@@ -1,0 +1,41 @@
+---
+import { services } from '../../data/site';
+
+const serviceIcons: Record<string, string> = {
+  lathe: '#i-lathe',
+  mill: '#i-mill',
+  weld: '#i-weld',
+  tools: '#i-tools',
+};
+---
+
+<!-- Услуги -->
+<section id="services" aria-labelledby="services-title" class="border-t bg-muted/60 py-section" data-reveal="wipe">
+  <div class="mx-auto max-w-7xl px-gutter">
+    <header class="max-w-[52rem]">
+      <h2 id="services-title" class="text-h2 text-balance">Что мы делаем</h2>
+      <p class="mt-5 max-w-[54ch] text-lead text-pretty text-muted-foreground">
+        Берём задачу целиком: от чертежа и подбора материала до готовой детали с покрытием.</p
+      >
+    </header>
+
+    <ul class="mt-14 grid gap-px overflow-hidden rounded-sm border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+      {
+        services.map((service) => (
+          <li class="group bg-card p-6 transition-colors duration-300 hover:bg-steel hover:text-white">
+            <svg
+              class="size-6 shrink-0 text-primary-ink transition-colors duration-300 group-hover:text-white"
+              aria-hidden="true"
+            >
+              <use href={serviceIcons[service.icon]} />
+            </svg>
+            <h3 class="mt-5 text-h4 font-bold">{service.title}</h3>
+            <p class="mt-2 text-prose text-muted-foreground transition-colors duration-300 group-hover:text-white/70">
+              {service.text}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,51 @@
+---
+/**
+ * SVG-спрайт фирменных линейных иконок (общий для всей страницы).
+ * Иконки определены как <symbol viewBox="0 0 24 24">: при вставке
+ * через <use> содержимое масштабируется в размер потребительского
+ * <svg class="size-4|size-5|..."> — без обрезки координат.
+ * Использование: <svg class="size-5"><use href="#i-lathe" /></svg>
+ */
+const icons: Record<string, string> = {
+  logo: `<circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>`,
+  lathe: `<circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 10 10"/><path d="M12 2a10 10 0 0 0-10 10"/>`,
+  mill: `<path d="M12 2 4 7l8 5 8-5-8-5Z"/><path d="m4 12 8 5 8-5"/><path d="m4 17 8 5 8-5"/>`,
+  weld: `<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5Z"/>`,
+  tools: `<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z"/>`,
+  ruler: `<path d="M15.5 2.5 21.5 8.5l-11 11-6-6 11-11Z"/><path d="m6 13 2 2M9 10l2 2M12 7l2 2"/>`,
+  upload: `<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>`,
+  calc: `<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8"/><path d="M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15v2M8 19h4"/>`,
+  card: `<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>`,
+  box: `<path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/>`,
+  phone: `<path d="M13.83 19.83a15.9 15.9 0 0 1-9.66-9.66 2 2 0 0 1 .44-2.1l1.55-1.55a2 2 0 0 1 3.02 0l1.1 1.1a2 2 0 0 1 0 2.83l-.7.7a12 12 0 0 0 4.24 4.24l.7-.7a2 2 0 0 1 2.83 0l1.1 1.1a2 2 0 0 1 0 3.02l-1.55 1.55a2 2 0 0 1-2.1.44Z"/>`,
+  mail: `<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>`,
+  pin: `<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>`,
+  clock: `<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>`,
+  plus: `<path d="M5 12h14M12 5v14"/>`,
+  minus: `<path d="M5 12h14"/>`,
+  arrow: `<path d="M5 12h14M12 5l7 7-7 7"/>`,
+  menu: `<path d="M4 6h16M4 12h16M4 18h16"/>`,
+  close: `<path d="M18 6 6 18M6 6l12 12"/>`,
+};
+
+const entries = Object.entries(icons);
+// Иконки интерфейса рисуются жирнее — как в старом дизайне
+const bold = ['plus', 'minus', 'arrow', 'menu', 'close'];
+---
+
+<svg xmlns="http://www.w3.org/2000/svg" class="hidden" aria-hidden="true">
+  <defs>
+    {entries.map(([id, paths]) => (
+      <symbol
+        id={`i-${id}`}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width={bold.includes(id) ? '2' : '1.75'}
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        set:html={paths}
+      />
+    ))}
+  </defs>
+</svg>

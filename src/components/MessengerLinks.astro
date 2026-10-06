@@ -1,0 +1,42 @@
+---
+/**
+ * Иконки мессенджеров — квадратные брендированные SVG из
+ * src/assets/icons (скопированы из предоставленной папки icons).
+ * Инлайнятся через set:html: маленькие, без лишних запросов.
+ */
+import telegramIcon from '../assets/icons/telegram-icon-square.svg?raw';
+import maxIcon from '../assets/icons/max-icon-square.svg?raw';
+import whatsappIcon from '../assets/icons/whatsapp-icon-square.svg?raw';
+import { site } from '../data/site';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const links = [
+  { href: site.telegram, label: 'Написать в Telegram', svg: telegramIcon.replace('<svg ', '<svg class="size-9 shrink-0" '), ring: 'hover:ring-[#3AC0FA]' },
+  { href: site.max, label: 'Написать в MAX', svg: maxIcon.replace('<svg ', '<svg class="size-9 shrink-0" '), ring: 'hover:ring-[#7B4DFF]' },
+  { href: site.whatsapp, label: 'Написать в WhatsApp', svg: whatsappIcon.replace('<svg ', '<svg class="size-9 shrink-0" '), ring: 'hover:ring-[#25D366]' },
+];
+---
+
+<div class:list={['flex items-center gap-2', className]}>
+  {
+    links.map((link) => (
+      <a
+        href={link.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={link.label}
+        class:list={[
+          'rounded-[12px] ring-1 ring-white/20 transition duration-200 hover:-translate-y-0.5',
+          link.ring,
+        ]}
+      >
+        <Fragment set:html={link.svg} />
+      </a>
+    ))
+  }
+</div>

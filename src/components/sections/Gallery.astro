@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+
+const works = (await getCollection('works')).sort((a, b) => a.data.order - b.data.order);
+
+// Форматирование номера: 01 / 07
+const total = works.length;
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<!-- Наши работы -->
+<section id="gallery" aria-labelledby="gallery-title" class="py-section" data-reveal>
+  <div class="mx-auto max-w-7xl px-gutter">
+    <header class="max-w-[52rem]">
+      <p class="eyebrow font-mono text-micro font-semibold uppercase text-primary-ink">Наши работы</p>
+      <h2 id="gallery-title" class="mt-6 text-h2 text-balance">Детали, которые мы уже изготовили</h2>
+      <p class="mt-5 max-w-[54ch] text-lead text-pretty text-muted-foreground">
+        Несколько проектов из нашего портфолио — от единичных прототипов до серийных партий.</p
+      >
+    </header>
+
+    <ul class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {
+        works.map((work, index) => (
+          <li class="group flex flex-col overflow-hidden rounded-lg border bg-card transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-primary-ink/70 hover:shadow-lift">
+            <div class="relative aspect-[3/2] overflow-hidden bg-steel">
+              <Image
+                src={import(`../../assets/img/${work.data.image}.webp`)}
+                alt={work.data.imageAlt ?? work.data.title}
+                class="absolute inset-0 h-full w-full object-cover transition-transform duration-[450ms] ease-out group-hover:scale-[1.04]"
+                widths={[640, 960, 1408]}
+                sizes="(min-width: 1024px) 25rem, (min-width: 768px) 50vw, 100vw"
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="absolute top-3 left-3 rounded-sm bg-steel/75 px-2.5 py-1 font-mono text-micro uppercase text-white/85 ring-1 ring-white/15 backdrop-blur-sm">
+                {work.data.badge}
+              </span>
+              <span class="absolute right-3 bottom-3 rounded-sm bg-steel/75 px-2 py-1 font-mono text-micro text-white/70 tabular-nums ring-1 ring-white/15 backdrop-blur-sm">
+                {pad(index + 1)} / {pad(total)}
+              </span>
+            </div>
+            <div class="flex flex-1 flex-col p-6">
+              <h3 class="text-h3 font-bold">{work.data.title}</h3>
+              <p class="mt-2.5 mb-5 text-prose text-muted-foreground">{work.data.description}</p>
+              <p class="mt-auto border-t pt-4 font-mono text-meta font-semibold">{work.data.batch}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

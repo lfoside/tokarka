@@ -1,0 +1,72 @@
+---
+import { Image } from 'astro:assets';
+import { site, stats } from '../../data/site';
+import heroImg from '../../assets/img/hero-tsanok-chpu.webp';
+---
+
+<!-- Hero -->
+<section
+  id="top"
+  class="relative flex min-h-svh flex-col justify-end overflow-hidden bg-steel pt-32 text-white"
+>
+  <Image
+    src={heroImg}
+    alt="Токарный станок с ЧПУ обрабатывает стальной вал"
+    class="absolute inset-0 h-full w-full object-cover"
+    widths={[640, 960, 1376]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+    decoding="async"
+  />
+  <div class="blueprint absolute inset-0" aria-hidden="true"></div>
+  <div class="absolute inset-0 bg-linear-to-r from-steel via-steel/90 to-steel/25" aria-hidden="true"></div>
+  <div class="absolute inset-x-0 bottom-0 h-3/5 bg-linear-to-t from-steel to-transparent" aria-hidden="true"></div>
+
+  <div class="relative mx-auto w-full max-w-7xl px-gutter pb-14 md:pb-20">
+    <div class="reg-mark relative">
+      <p class="eyebrow font-mono text-micro font-semibold uppercase text-primary">Производство в Москве</p>
+      <h1 class="mt-7 text-display text-balance hyphens-auto">
+        Металлообработка <span class="text-primary">на заказ</span></h1
+      >
+      <p class="mt-6 max-w-[52ch] text-lead text-pretty text-white/75">
+        Токарно-фрезерная обработка на ЧПУ: штучное и серийное производство.</p
+      >
+      <div class="mt-9 flex flex-wrap gap-3">
+        <a
+          href={site.mailtoSubject}
+          class="inline-flex h-12 items-center gap-2 rounded-md bg-primary px-6 font-semibold text-primary-foreground transition-[background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-primary/90"
+        >
+          Отправить чертёж на расчёт
+          <svg class="size-4 shrink-0" aria-hidden="true"><use href="#i-arrow"></use></svg>
+        </a>
+        <a
+          href={site.phoneHref}
+          class="inline-flex h-12 items-center rounded-md border border-white/25 px-6 font-semibold transition-[background-color,border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-white/50 hover:bg-white/10"
+        >
+          Позвонить: {site.phone}</a
+        >
+      </div>
+    </div>
+
+    <!-- Штамп: сводка технических возможностей -->
+    <div class="animate-rise mt-14 overflow-hidden rounded-lg md:mt-16">
+      <div class="flex items-center justify-between gap-4 border-b border-white/15 bg-steel/70 px-5 py-2.5">
+        <span class="font-mono text-micro uppercase text-white/60">Технические возможности</span>
+        <span class="font-mono text-micro uppercase text-primary">Токарка Про · 2002</span>
+      </div>
+      <dl class="grid grid-cols-2 gap-px bg-white/15 sm:grid-cols-3 lg:grid-cols-5">
+        <!-- Порядок в разметке: сначала термин, потом значение (требование dl),
+             flex-col-reverse показывает значение сверху. -->
+        {
+          stats.map((stat) => (
+            <div class="flex flex-col-reverse bg-steel/70 p-5 backdrop-blur-md">
+              <dt class="text-prose text-white/60">{stat.label}</dt>
+              <dd class="font-mono text-h3 font-bold text-primary tabular-nums">{stat.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- ВРЕМЕННО: демо-режим — снять перед SEO-запуском (DEMO-DEPLOY.md) -->
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Токарка Про — демо-варианты</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --graphite: #1b1f23;
+        --paper: #f0eee6;
+        --signal: #e9b213;
+        --hairline: #3a3f45;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        background: var(--graphite);
+        color: var(--paper);
+        font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+        line-height: 1.5;
+        padding: 2rem 1.25rem;
+      }
+      main {
+        width: min(40rem, 100%);
+      }
+      h1 {
+        margin: 0 0 0.35rem;
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+      .note {
+        margin: 0 0 2rem;
+        color: #9aa0a6;
+        font-size: 0.9rem;
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 0.75rem;
+      }
+      a.card {
+        display: block;
+        padding: 1.1rem 1.25rem;
+        border: 1px solid var(--hairline);
+        border-radius: 2px;
+        color: var(--paper);
+        text-decoration: none;
+        transition: border-color 0.2s, transform 0.2s;
+      }
+      a.card:hover,
+      a.card:focus-visible {
+        border-color: var(--signal);
+        transform: translateY(-2px);
+        outline: none;
+      }
+      a.card strong {
+        display: block;
+        font-size: 1.05rem;
+      }
+      a.card span {
+        display: block;
+        margin-top: 0.2rem;
+        color: #9aa0a6;
+        font-size: 0.85rem;
+      }
+      a.card b {
+        color: var(--signal);
+        font-weight: 600;
+      }
+      footer {
+        margin-top: 2rem;
+        font-size: 0.8rem;
+        color: #6b7178;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Токарка Про — демо</h1>
+      <p class="note">
+        Временная страница для показа коллегам. Оба варианта закрыты от индексации поисковиками
+        (noindex) — перед публикацией на tokarka.pro демо-режим снимается, см. DEMO-DEPLOY.md.
+      </p>
+      <ul>
+        <li>
+          <a class="card" href="./redesign/">
+            <strong>Вариант 1 — текущий: <b>«Цеховой трафарет»</b></strong>
+            <span>redesign: трафаретная типографика, живой hero, обновлённый контент</span>
+          </a>
+        </li>
+        <li>
+          <a class="card" href="./original/">
+            <strong>Вариант 2 — исходный</strong>
+            <span>исходный сайт до редизайна (для сравнения)</span>
+          </a>
+        </li>
+      </ul>
+      <footer>Демо · индексация закрыта · © Токарка Про</footer>
+    </main>
+  </body>
+</html>

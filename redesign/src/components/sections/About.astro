@@ -1,0 +1,71 @@
+---
+import { Image } from 'astro:assets';
+import { materials } from '../../data/site';
+import aboutImg from '../../assets/img/about-ceh.webp';
+---
+
+<!-- О компании -->
+<section id="about" aria-labelledby="about-title" class="py-section" data-reveal>
+  <div class="mx-auto max-w-7xl px-gutter">
+    <div class="grid gap-12 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-16">
+      <div>
+        <h2 id="about-title" class="text-h2 text-balance">Полный цикл механической обработки металла</h2>
+        <p class="mt-6 max-w-[54ch] text-lead text-pretty text-muted-foreground">
+          Предлагаем полный цикл услуг по механической обработке металла на современном оборудовании с ЧПУ.
+          Работаем с единичными деталями, прототипами и серийными партиями.</p
+        >
+      </div>
+      <div class="relative aspect-[16/10] overflow-hidden rounded-lg border">
+        <Image
+          src={aboutImg}
+          alt="Цех с фрезерными и токарными станками ЧПУ"
+          class="absolute inset-0 h-full w-full object-cover"
+          widths={[640, 960, 1408]}
+          sizes="(min-width: 1024px) 44rem, 100vw"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+
+    <div class="mt-14 grid gap-6 lg:grid-cols-3">
+      <!-- Материалы -->
+      <div class="rounded-sm bg-enamel p-7 text-white md:p-9 lg:col-span-2">
+        <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+          <h3 class="text-h3 font-bold">Материалы, с которыми работаем</h3>
+          <span class="spec-strip text-white/75">{materials.length} групп</span>
+        </div>
+        <p class="mt-2.5 max-w-[58ch] text-prose text-white/80">
+          Выполняем обработку широкого спектра материалов — основных металлов и их сплавов, специальных сплавов и
+          пластиков:</p
+        >
+        <dl class="mt-7 grid gap-x-8 sm:grid-cols-2">
+          {
+            materials.map((material) => (
+              <div class="border-t border-white/10 py-3.5">
+                <dt class="font-semibold">{material.name}</dt>
+                <dd class="mt-1 font-mono text-meta text-white/75">{material.grades}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+
+      <!-- Индивидуальный расчёт -->
+      <div class="flex flex-col rounded-sm bg-primary p-7 text-primary-foreground md:p-9">
+        <svg class="size-8 shrink-0" aria-hidden="true"><use href="#i-ruler"></use></svg>
+        <h3 class="mt-5 text-h3 font-bold">Индивидуальный расчёт</h3>
+        <p class="mt-2.5 text-prose">
+          Расчёт стоимости изготовления детали производится по чертежам заказчика — индивидуально, в зависимости от
+          сложности и объёма заказа.</p
+        >
+        <a
+          href="#contacts"
+          class="mt-8 inline-flex h-11 items-center justify-center rounded-sm bg-steel px-5 font-semibold text-white transition-[background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-steel/85 lg:mt-auto"
+        >
+          Отправить чертёж</a
+        >
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,8 @@
+# Демо-версия для коллег (GitHub Pages): индексация закрыта метатегом
+# <meta name="robots" content="noindex, nofollow"> в <head> каждой страницы
+# (страница-переключатель, /original/, /redesign/).
+# Краулинг здесь НЕ блокируется: запрет в robots.txt не даёт поисковику
+# увидеть noindex — из-за чего URL может остаться в индексе без контента.
+# Перед запуском на tokarka.pro заменить: см. DEMO-DEPLOY.md.
+User-agent: *
+Allow: /

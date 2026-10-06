@@ -1,0 +1,160 @@
+---
+import { Image } from 'astro:assets';
+import { site, stats } from '../../data/site';
+import heroImg from '../../assets/img/hero-tsanok-chpu.webp';
+---
+
+<!-- Hero: графитовый корпус станка, трафаретный H1, маршрут заявки -->
+<section
+  id="hero"
+  class="relative flex min-h-svh flex-col justify-end overflow-hidden bg-steel pt-32 text-white"
+>
+  <Image
+    src={heroImg}
+    alt="Токарный станок с ЧПУ обрабатывает стальной вал"
+    class="hero-photo absolute inset-0 h-full w-full object-cover"
+    widths={[640, 960, 1376]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+    decoding="async"
+  />
+  <div class="absolute inset-0 bg-linear-to-r from-steel via-steel/90 to-steel/25" aria-hidden="true"></div>
+  <div class="absolute inset-x-0 bottom-0 h-3/5 bg-linear-to-t from-steel to-transparent" aria-hidden="true"></div>
+
+  <!-- Живой материал: фильтр смещения + слои «тепла» (только при pointer:fine) -->
+  <svg class="absolute size-0" aria-hidden="true" focusable="false">
+    <defs>
+      <filter id="heat-displace" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.01 0.015" numOctaves="1" seed="7" result="n"></feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="30" xChannelSelector="R" yChannelSelector="G"
+        ></feDisplacementMap>
+      </filter>
+    </defs>
+  </svg>
+  <div class="heat" aria-hidden="true">
+    <div class="heat-lit">
+      <div class="heat-counter">
+        <div class="heat-warp">
+          <Image
+            src={heroImg}
+            alt=""
+            class="heat-photo"
+            widths={[640, 960, 1376]}
+            sizes="100vw"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="heat-glow"></div>
+  </div>
+
+  <div class="relative mx-auto w-full max-w-7xl px-gutter pb-14 md:pb-20">
+    <div>
+      <h1 class="text-display text-balance hyphens-auto">
+        Металлообработка <span class="text-primary">на заказ</span></h1
+      >
+      <p class="mt-6 max-w-[52ch] text-lead text-pretty text-white/75">
+        Токарно-фрезерная обработка на ЧПУ: штучное и серийное производство.</p
+      >
+
+      <!-- Маршрут заявки: сигнальная плашка-ссылка (primary CTA), стрелка прочерчивается на загрузке -->
+      <a
+        href={site.mailtoSubject}
+        class="animate-rise spec-strip mt-7 inline-flex items-center gap-3 rounded-sm bg-primary px-4 py-2.5 font-bold text-primary-foreground transition-colors duration-200 hover:bg-primary/90"
+      >
+        <span
+          >Чертёж → расчёт 1–3 дня<span class="sr-only"> — отправить чертёж по почте</span></span
+        >
+        <svg viewBox="0 0 44 12" fill="none" class="h-3 w-11 shrink-0" aria-hidden="true">
+          <path
+            d="M0 6h36M31 1.5 36.5 6 31 10.5"
+            pathLength="1"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="square"
+            stroke-dasharray="1"
+            class="animate-route"
+          ></path>
+        </svg>
+      </a>
+
+      <div class="mt-9 flex flex-wrap gap-3">
+        <a
+          href={site.mailtoSubject}
+          class="inline-flex h-12 items-center gap-2 rounded-sm border border-white/25 px-6 font-semibold transition-[background-color,border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-white/50 hover:bg-white/10"
+        >
+          Отправить чертёж на расчёт
+          <svg class="size-4 shrink-0" aria-hidden="true"><use href="#i-arrow"></use></svg>
+        </a>
+        <a
+          href={site.phoneHref}
+          class="inline-flex h-12 items-center rounded-sm border border-white/25 px-6 font-semibold transition-[background-color,border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-white/50 hover:bg-white/10"
+        >
+          Позвонить: {site.phone}</a
+        >
+      </div>
+    </div>
+
+    <!-- Приборная строка корпуса: сводка возможностей одной планкой -->
+    <div class="animate-rise mt-14 overflow-hidden rounded-sm border border-white/15 bg-steel/70 backdrop-blur-md md:mt-16">
+      <div class="spec-strip flex items-center justify-between gap-4 border-b border-white/15 px-5 py-2.5 text-white/60">
+        <span>Технические возможности</span>
+        <span class="text-primary">Токарка Про · 2002</span>
+      </div>
+      <dl class="grid grid-cols-2 gap-px bg-white/15 sm:grid-cols-3 lg:grid-cols-5">
+        <!-- Порядок в разметке: сначала термин, потом значение (требование dl),
+             flex-col-reverse показывает значение сверху. -->
+        {
+          stats.map((stat) => (
+            <div class="flex flex-col-reverse bg-steel/70 px-5 py-4 last:col-span-2 lg:last:col-span-1">
+              <dt class="text-meta text-white/70">{stat.label}</dt>
+              <dd class="font-mono text-xl leading-tight font-bold text-primary tabular-nums">{stat.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+
+  <script>
+    // OVERDRIVE «тепло под курсором»: параллакс + displacement-линза + блик.
+    // Прогрессивное улучшение: только точный указатель, без reduced-motion;
+    // без JS слои остаются скрытыми (.heat без .is-on = opacity 0).
+    const hero = document.getElementById('hero');
+    const heat = hero?.querySelector<HTMLElement>('.heat');
+    if (
+      hero &&
+      heat &&
+      matchMedia('(pointer: fine)').matches &&
+      !matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      let raf = 0;
+      let cx = 0;
+      let cy = 0;
+      const apply = () => {
+        raf = 0;
+        const r = hero.getBoundingClientRect();
+        const lx = cx - r.left;
+        const ly = cy - r.top;
+        heat.style.setProperty('--hx', `${lx}px`);
+        heat.style.setProperty('--hy', `${ly}px`);
+        hero.style.setProperty('--px', (lx / r.width - 0.5).toFixed(3));
+        hero.style.setProperty('--py', (ly / r.height - 0.5).toFixed(3));
+        heat.classList.add('is-on');
+      };
+      hero.addEventListener(
+        'pointermove',
+        (e) => {
+          cx = e.clientX;
+          cy = e.clientY;
+          if (!raf) raf = requestAnimationFrame(apply);
+        },
+        { passive: true },
+      );
+      hero.addEventListener('pointerleave', () => heat.classList.remove('is-on'));
+    }
+  </script>
+</section>

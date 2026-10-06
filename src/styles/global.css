@@ -1,0 +1,338 @@
+@import 'tailwindcss';
+
+/* ============================================================
+   Дизайн-токены старого дизайна (перенесены 1-в-1 из app-v2.css).
+   Tailwind v4 CSS-first: вместо tailwind.config.mjs — @theme.
+   Смена палитры/шрифтов всего сайта = правка только этого блока.
+   ============================================================ */
+@theme {
+  /* — Палитра (семантические имена, не HEX в компонентах) — */
+  --color-background: #fafaf9;
+  --color-foreground: #16181c;
+  --color-card: #ffffff;
+  --color-muted: #edeef0;
+  --color-muted-foreground: #5a5e63;
+  --color-primary: #f66b17;
+  --color-primary-foreground: #0f1216;
+  --color-primary-ink: #b54709;
+  --color-steel: #16181c;
+  --color-border: #dcdee1;
+  --color-ring: #f66b17;
+
+  /* — Шрифты: локальные woff2 (@font-face ниже), системные фолбеки — */
+  --font-sans: 'Manrope', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', 'Menlo',
+    'Consolas', 'Liberation Mono', 'Courier New', monospace;
+
+  /* — Типографика (клампы из старого дизайна) — */
+  --text-display: clamp(2rem, min(calc(9.643vw - 1.71px), calc(2.8125vw + 42px)), 4.875rem);
+  --text-display--line-height: 1.03;
+  --text-display--letter-spacing: -0.032em;
+  --text-display--font-weight: 800;
+
+  --text-h2: clamp(2.375rem, min(calc(3.125vw + 28px), calc(0.9375vw + 42px)), 3.375rem);
+  --text-h2--line-height: 1.08;
+  --text-h2--letter-spacing: -0.026em;
+  --text-h2--font-weight: 800;
+
+  --text-h3: clamp(1.25rem, 1.15rem + 0.45vw, 1.5rem);
+  --text-h3--line-height: 1.3;
+  --text-h3--letter-spacing: -0.014em;
+
+  --text-h4: 1.125rem;
+  --text-h4--line-height: 1.4;
+  --text-h4--letter-spacing: -0.008em;
+
+  --text-lead: clamp(1.0625rem, 0.985rem + 0.32vw, 1.25rem);
+  --text-lead--line-height: 1.55;
+  --text-lead--letter-spacing: -0.006em;
+
+  --text-prose: 0.9375rem;
+  --text-prose--line-height: 1.6;
+
+  --text-meta: 0.8125rem;
+  --text-meta--line-height: 1.4;
+
+  --text-micro: 0.6875rem;
+  --text-micro--line-height: 1.3;
+  --text-micro--letter-spacing: 0.14em;
+
+  /* — Сетка и ритм — */
+  --spacing-gutter: clamp(1rem, 0.55rem + 1.9vw, 2.5rem);
+  --spacing-section: clamp(4rem, 2.8rem + 5vw, 7.5rem);
+
+  /* — Тени — */
+  --shadow-lift: 0 1px 2px rgb(22 24 28 / 0.05), 0 14px 34px -20px rgb(22 24 28 / 0.3);
+
+  /* — Анимации (минималистичные, функциональные) — */
+  --animate-menu-in: menu-in 0.2s ease-out;
+  --animate-rise: rise 0.52s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+
+    /* Плавное раскрытие <details> (FAQ): интерполяция height:auto.
+       Прогрессивное улучшение — браузеры без поддержки просто раскрывают резко. */
+    interpolate-size: allow-keywords;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-primary);
+    color: var(--color-primary-foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+/* ============================================================
+   Компонентные классы (минимум @apply-подобных связок)
+   ============================================================ */
+@layer components {
+  /* Иконка в строке контактов */
+  .contact-icon {
+    width: calc(var(--spacing) * 4);
+    height: calc(var(--spacing) * 4);
+    flex-shrink: 0;
+  }
+
+  /* Меню: [hidden] важнее display-классов анимации */
+  #mobile-menu[hidden] {
+    display: none;
+  }
+
+  /* Плавное раскрытие FAQ: transition на block-size у <details> */
+  details::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size 0.3s ease-in-out,
+      content-visibility 0.3s ease-in-out;
+  }
+
+  details[open]::details-content {
+    block-size: auto;
+  }
+}
+
+/* ============================================================
+   Утилиты фирменных декоров старого дизайна
+   ============================================================ */
+@utility eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  &::before {
+    content: '';
+    background-color: currentColor;
+    flex: none;
+    width: 0.375rem;
+    height: 0.375rem;
+  }
+
+  &::after {
+    content: '';
+    opacity: 0.4;
+    background-image: linear-gradient(90deg, currentColor 0 5px, transparent 5px 10px);
+    flex: 1 1 0;
+    min-width: 1.5rem;
+    height: 1px;
+  }
+}
+
+/* Чертёжная сетка на hero (blur-маска из старого дизайна) */
+@utility blueprint {
+  background-image: repeating-linear-gradient(90deg, #ffffff0d 0 1px, transparent 1px 72px),
+    repeating-linear-gradient(#ffffff0d 0 1px, transparent 1px 72px);
+  -webkit-mask-image: radial-gradient(115% 85% at 72% 18%, #000 15%, transparent 72%);
+  mask-image: radial-gradient(115% 85% at 72% 18%, #000 15%, transparent 72%);
+}
+
+/* Угловые засечки вокруг hero-блока */
+@utility reg-mark {
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-style: solid;
+    border-color: #ffffff38;
+  }
+
+  &::before {
+    top: 0;
+    left: 0;
+    border-width: 1px 0 0 1px;
+  }
+
+  &::after {
+    bottom: 0;
+    right: 0;
+    border-width: 0 1px 1px 0;
+  }
+}
+
+/* ============================================================
+   Появление секций при скролле: IntersectionObserver в Layout
+   ставит .is-visible на [data-reveal].
+   Защита CLS: место зарезервировано (opacity-0, не display:none).
+   Защита от отсутствия JS: прячем только при <html class="js">
+   (класс ставит инлайн-скрипт в <head>), иначе контент видим.
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.7s ease-in-out,
+      transform 0.7s ease-in-out;
+    will-change: opacity, transform;
+  }
+
+  .js [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  ::before,
+  ::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   Локальные шрифты (не Google Fonts): субсеты кириллица/латиница,
+   font-display: swap — без FOIT и CLS. Preload — в Layout.astro.
+   ============================================================ */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('/fonts/manrope-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('/fonts/manrope-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+    U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('/fonts/manrope-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('/fonts/manrope-cyrillic.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-4B1, U+2116;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+    U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-cyrillic.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-4B1, U+2116;
+}
+
+/* ============================================================
+   Keyframes
+   ============================================================ */
+@keyframes menu-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rise {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

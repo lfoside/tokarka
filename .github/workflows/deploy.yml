@@ -1,0 +1,72 @@
+name: Deploy demo to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            redesign/package-lock.json
+
+      - name: Install (original)
+        run: npm ci
+
+      # Демо-режим: base = подпапка репозитория, site = github.io.
+      # Локальные сборки без этих переменных остаются под tokarka.pro.
+      - name: Build original
+        run: npx astro build
+        env:
+          GH_PAGES_BASE: /${{ github.event.repository.name }}/original
+          GH_PAGES_SITE: https://${{ github.repository_owner }}.github.io
+
+      - name: Install (redesign)
+        run: npm ci
+        working-directory: redesign
+
+      - name: Build redesign
+        run: npx astro build
+        working-directory: redesign
+        env:
+          GH_PAGES_BASE: /${{ github.event.repository.name }}/redesign
+          GH_PAGES_SITE: https://${{ github.repository_owner }}.github.io
+
+      - name: Assemble site
+        run: |
+          mkdir -p site/original site/redesign
+          cp gh-pages/index.html gh-pages/robots.txt site/
+          cp -r dist/. site/original/
+          cp -r redesign/dist/. site/redesign/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

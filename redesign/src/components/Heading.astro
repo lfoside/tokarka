@@ -1,0 +1,22 @@
+---
+/**
+ * Универсальный Heading: разделяет семантический тег (as) и
+ * визуальный стиль (variant) — правило 2.3/2.4.
+ * Пример: крупная плашка УТП, не являющаяся заголовком:
+ *   <Heading as="p" variant="display" />
+ * Важный для SEO заголовок, визуально маленький:
+ *   <Heading as="h2" variant="h4" />
+ */
+interface Props {
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'p' | 'div';
+  variant?: 'display' | 'h2' | 'h3' | 'h4';
+  id?: string;
+  class?: string;
+}
+
+const { as: Tag = 'h2', variant = 'h2', id, class: className } = Astro.props;
+---
+
+<Tag id={id} class:list={[`text-${variant}`, 'text-balance', className]}>
+  <slot />
+</Tag>

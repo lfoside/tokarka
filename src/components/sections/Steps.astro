@@ -1,0 +1,43 @@
+---
+import { steps } from '../../data/site';
+
+const stepIcons: Record<string, string> = {
+  upload: '#i-upload',
+  calc: '#i-calc',
+  card: '#i-card',
+  box: '#i-box',
+};
+---
+
+<!-- Как работаем -->
+<section id="steps" aria-labelledby="steps-title" class="bg-steel py-section text-white" data-reveal>
+  <div class="mx-auto max-w-7xl px-gutter">
+    <header>
+      <p class="eyebrow font-mono text-micro font-semibold uppercase text-primary">Как работаем</p>
+      <h2 id="steps-title" class="mt-6 text-h2 text-balance">4 шага до готовой детали</h2>
+    </header>
+
+    <ol class="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+      {
+        steps.map((step) => (
+          <li class="group flex flex-col rounded-lg border border-white/10 bg-white/[0.03] p-6 transition-[border-color,background-color,transform] duration-300 hover:-translate-y-1 hover:border-primary/70 hover:bg-white/[0.06]">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-[2.5rem] leading-none font-bold text-primary tabular-nums">{step.num}</span>
+              <svg
+                class="size-6 shrink-0 text-white/45 transition-colors duration-300 group-hover:text-primary"
+                aria-hidden="true"
+              >
+                <use href={stepIcons[step.icon]} />
+              </svg>
+            </div>
+            <h3 class="mt-6 text-h3 font-bold">{step.title}</h3>
+            <p class="mt-2.5 mb-6 text-prose text-white/65">{step.text}</p>
+            <p class="mt-auto border-t border-white/10 pt-4 text-pretty font-mono text-micro uppercase text-primary/85">
+              {step.foot}
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

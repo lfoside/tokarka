@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+*.log
+
+# Внутренние/рабочие файлы — не публиковать в демо-репозитории
+.impeccable/
+nocompleted/
+ref.png
+PROJECT-RULES.md
